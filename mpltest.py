@@ -1,4 +1,3 @@
-import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -200,17 +199,17 @@ def main():
     # barplt()
 
     # KDE Plots
-    # kdeplt("Speed", "HP", "Type 2")
-    # jointkdeplt("Speed", "HP", "Type 2")
+    print("Stats to examine: HP, Speed, Attack, Sp. Atk, Defense, Sp. Def")
+    attr1 = input("Provide a stat to examine: ")
+    attr2 = input("Provide a second stat to examine: ")
+    whichtype = input("Examine primary type (Type 1) or secondary type (Type 2): ")
+    kdeplt("Speed", "HP", "Type 2")
+    # jointkdeplt(attr1, attr2, whichtype)
 
     # Radial Plot
-    radialplt()
+    # radialplt()
 
-    # Ridge Plot
-    # ridgeplt()
-
-    # Correlation Plot
-    # corplt()
+    # Pair Plot
     # pairplt("Type 1")
 
 if __name__ == '__main__':
