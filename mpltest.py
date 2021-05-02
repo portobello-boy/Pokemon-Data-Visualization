@@ -1,6 +1,9 @@
+import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
+import itertools
+from chord import Chord
 from math import pi
 
 data = pd.read_csv("Pokemon.csv")
@@ -26,6 +29,11 @@ colors = {
     "Steel": "#B7B7CE",
     "Flying": "#A98FF3",
 }
+
+colorList = ["#A6B91A", "#705746", "#6F35FC", "#F7D02C", "#D685AD",
+          "#C22E28", "#EE8130", "#A98FF3", "#735797", "#7AC74C",
+          "#E2BF65", "#96D9D6", "#A8A77A", "#A33EA1", "#F95587",
+          "#B6A136", "#B7B7CE", "#6390F0"]
 
 def barplt(): # Bar Plot of Averages 
     fig, axes = plt.subplots(nrows=2, ncols=1)
@@ -179,6 +187,23 @@ def radialplt():
 
     plt.show()
 
+def typeRelation():
+    df = pd.DataFrame(data[['Type 1', 'Type 2']].values)
+    df = df.dropna()
+    df = list(itertools.chain.from_iterable((i, i[::-1]) for i in df.values))
+
+    matrix = pd.pivot_table(
+        pd.DataFrame(df), index=0, columns=1, aggfunc="size", fill_value=0
+    ).values.tolist()
+
+    print(pd.DataFrame(matrix))
+
+    names = np.unique(df).tolist()
+
+    print(pd.DataFrame(names))
+
+    Chord(matrix, names, colors=colorList).to_html()
+
 def main():
     # Examine parts of the data
     print(data.head())
@@ -198,13 +223,15 @@ def main():
     # Bar Plot
     # barplt()
 
+    typeRelation()
+
     # KDE Plots
     print("Stats to examine: HP, Speed, Attack, Sp. Atk, Defense, Sp. Def")
-    attr1 = input("Provide a stat to examine: ")
-    attr2 = input("Provide a second stat to examine: ")
-    whichtype = input("Examine primary type (Type 1) or secondary type (Type 2): ")
-    kdeplt("Speed", "HP", "Type 2")
-    # jointkdeplt(attr1, attr2, whichtype)
+    attr1 = input("Provide a stat to examine: ").title()
+    attr2 = input("Provide a second stat to examine: ").title()
+    whichtype = input("Examine primary type (Type 1) or secondary type (Type 2): ").title()
+    # kdeplt("Speed", "HP", "Type 2")
+    jointkdeplt(attr1, attr2, whichtype)
 
     # Radial Plot
     # radialplt()
